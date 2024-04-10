@@ -5,6 +5,7 @@ import { crx, defineManifest } from '@crxjs/vite-plugin'
 const manifest = defineManifest({
   manifest_version: 3,
   name: '自動ページ更新（リロード）',
+  description: '自動でページを更新できます。',
   version: '1.0.0',
   icons: {
     16: 'src/assets/img/icon16.png',
