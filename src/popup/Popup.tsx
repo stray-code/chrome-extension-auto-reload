@@ -1,11 +1,4 @@
-import {
-  Switch,
-  Flex,
-  Text,
-  Button,
-  Stack,
-  NativeSelect,
-} from "@mantine/core";
+import { Switch, Flex, Text, Button, Stack, NativeSelect } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect } from "react";
 import { minutes, seconds } from "./constants";
@@ -34,6 +27,7 @@ function App() {
 
       form.setValues(value.AUTO_RELOAD);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
