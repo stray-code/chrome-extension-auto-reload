@@ -103,7 +103,14 @@ function App() {
           >
             停止
           </Button>
-          <Button size="xs" type="submit" variant="outline">
+          <Button
+            size="xs"
+            type="submit"
+            variant="outline"
+            disabled={
+              form.values.minutes === "0" && form.values.seconds === "0"
+            }
+          >
             開始
           </Button>
         </Flex>
