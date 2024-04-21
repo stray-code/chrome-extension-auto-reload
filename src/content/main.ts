@@ -4,18 +4,22 @@ const init = () => {
     text: "",
   });
 
-  chrome.storage.local.get(["AUTO_RELOAD"], (value) => {
+  chrome.storage.local.get(["AUTO_RELOAD"], async (value) => {
     if (!value?.AUTO_RELOAD) {
       return;
     }
 
-    const { minutes, seconds, enabled } = value.AUTO_RELOAD;
+    const { tabId, minutes, seconds } = value.AUTO_RELOAD;
 
-    if (!enabled) {
+    const currentTabId = await chrome.runtime.sendMessage({
+      type: "GET_TAB_ID",
+    });
+
+    if (currentTabId !== tabId) {
       return;
     }
 
-    let time = minutes * 60 + seconds;
+    let time = +minutes * 60 + +seconds;
 
     if (time === 0) {
       return;

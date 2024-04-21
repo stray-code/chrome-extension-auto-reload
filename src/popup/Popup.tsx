@@ -6,16 +6,9 @@ import { minutes, seconds } from "./constants";
 function App() {
   const form = useForm({
     initialValues: {
+      tabId: 0,
       minutes: "0",
       seconds: "0",
-      enabled: false,
-    },
-    transformValues: (values) => {
-      return {
-        minutes: +values.minutes,
-        seconds: +values.seconds,
-        enabled: values.enabled,
-      };
     },
   });
 
@@ -33,10 +26,6 @@ function App() {
   return (
     <form
       onSubmit={form.onSubmit(async (values) => {
-        chrome.storage.local.set({
-          AUTO_RELOAD: values,
-        });
-
         const [tab] = await chrome.tabs.query({
           active: true,
           currentWindow: true,
@@ -45,6 +34,14 @@ function App() {
         if (!tab.id) {
           return;
         }
+
+        chrome.storage.local.set({
+          AUTO_RELOAD: {
+            tabId: tab.id,
+            minutes: values.minutes,
+            seconds: values.seconds,
+          },
+        });
 
         chrome.tabs.sendMessage(tab.id, { type: "RELOAD" });
 
