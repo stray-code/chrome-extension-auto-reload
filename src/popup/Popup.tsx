@@ -48,7 +48,7 @@ function App() {
         window.close();
       })}
     >
-      <Stack p="md" w={240} gap="md">
+      <Stack p="md" w={160} gap="md">
         <Box>
           <Text fz="xs">更新間隔</Text>
           <Flex align="center" gap="xs">
