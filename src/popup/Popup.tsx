@@ -1,4 +1,4 @@
-import { Flex, Text, Button, Stack, NativeSelect } from "@mantine/core";
+import { Flex, Text, Button, Stack, NativeSelect, Box } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect } from "react";
 import { minutes, seconds } from "./constants";
@@ -49,14 +49,23 @@ function App() {
       })}
     >
       <Stack p="md" w={240} gap="md">
-        <Flex align="center">
-          <NativeSelect data={minutes} {...form.getInputProps("minutes")} />
-          <Text ml="xs" mr="md">
-            分
-          </Text>
-          <NativeSelect data={seconds} {...form.getInputProps("seconds")} />
-          <Text ml="xs">秒</Text>
-        </Flex>
+        <Box>
+          <Text fz="xs">更新間隔</Text>
+          <Flex align="center" gap="xs">
+            <NativeSelect
+              {...form.getInputProps("minutes")}
+              size="xs"
+              data={minutes}
+              rightSection={<Text fz="sm">分</Text>}
+            />
+            <NativeSelect
+              {...form.getInputProps("seconds")}
+              size="xs"
+              data={seconds}
+              rightSection={<Text fz="sm">秒</Text>}
+            />
+          </Flex>
+        </Box>
         <Flex justify="flex-end">
           <Button type="submit">保存</Button>
         </Flex>
