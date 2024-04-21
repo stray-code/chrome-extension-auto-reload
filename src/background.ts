@@ -1,6 +1,13 @@
 chrome.runtime.onMessage.addListener((message, sender, response) => {
   if (message.type === "UPDATE_BADGE") {
-    chrome.action.setBadgeText({ text: message.text });
+    if (!sender.tab) {
+      return;
+    }
+
+    chrome.action.setBadgeText({
+      text: message.text,
+      tabId: sender.tab.id,
+    });
   }
 
   if (message.type === "GET_TAB_ID") {
