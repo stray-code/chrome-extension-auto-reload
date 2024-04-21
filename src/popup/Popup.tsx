@@ -94,6 +94,11 @@ function App() {
                 chrome.tabs.sendMessage(value.TAB_ID, {
                   type: "CLEAR_INTERVAL",
                 });
+
+                chrome.runtime.sendMessage({
+                  type: "UPDATE_BADGE",
+                  text: "",
+                });
               });
             }}
           >

@@ -46,10 +46,5 @@ chrome.runtime.onMessage.addListener((message) => {
 
   if (message.type === "CLEAR_INTERVAL") {
     clearInterval(intervalId);
-
-    chrome.runtime.sendMessage({
-      type: "UPDATE_BADGE",
-      text: "",
-    });
   }
 });

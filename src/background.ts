@@ -1,12 +1,7 @@
 chrome.runtime.onMessage.addListener((message, sender, response) => {
   if (message.type === "UPDATE_BADGE") {
-    if (!sender.tab) {
-      return;
-    }
-
     chrome.action.setBadgeText({
       text: message.text,
-      tabId: sender.tab.id,
     });
   }
 
@@ -27,6 +22,10 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 
     chrome.storage.local.set({
       TAB_ID: 0,
+    });
+
+    chrome.action.setBadgeText({
+      text: "",
     });
   });
 });
