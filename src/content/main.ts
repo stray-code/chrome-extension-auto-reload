@@ -1,18 +1,18 @@
 let intervalId: number = 0;
 
 const init = () => {
-  chrome.storage.local.get(["AUTO_RELOAD"], async (value) => {
-    if (!value?.AUTO_RELOAD) {
+  chrome.storage.local.get(["TIME", "TAB_ID"], async (value) => {
+    if (!value.TIME || !value.TAB_ID) {
       return;
     }
 
-    const { tabId, minutes, seconds } = value.AUTO_RELOAD;
+    const { minutes, seconds } = value.TIME;
 
     const currentTabId = await chrome.runtime.sendMessage({
       type: "GET_TAB_ID",
     });
 
-    if (currentTabId !== tabId) {
+    if (currentTabId !== value.TAB_ID) {
       return;
     }
 

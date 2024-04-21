@@ -6,19 +6,18 @@ import { minutes, seconds } from "./constants";
 function App() {
   const form = useForm({
     initialValues: {
-      tabId: 0,
       minutes: "0",
       seconds: "0",
     },
   });
 
   useEffect(() => {
-    chrome.storage.local.get(["AUTO_RELOAD"], (value) => {
-      if (!value?.AUTO_RELOAD) {
+    chrome.storage.local.get(["TIME"], (value) => {
+      if (!value?.TIME) {
         return;
       }
 
-      form.setValues(value.AUTO_RELOAD);
+      form.setValues(value.TIME);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -36,11 +35,11 @@ function App() {
         }
 
         chrome.storage.local.set({
-          AUTO_RELOAD: {
-            tabId: tab.id,
+          TIME: {
             minutes: values.minutes,
             seconds: values.seconds,
           },
+          TAB_ID: tab.id,
         });
 
         chrome.tabs.sendMessage(tab.id, { type: "INIT" });
@@ -73,20 +72,16 @@ function App() {
             variant="outline"
             color="red"
             onClick={() => {
-              chrome.storage.local.get(["AUTO_RELOAD"], async (value) => {
-                if (!value?.AUTO_RELOAD) {
+              chrome.storage.local.get(["TAB_ID"], async (value) => {
+                if (!value.TAB_ID) {
                   return;
                 }
 
                 chrome.storage.local.set({
-                  AUTO_RELOAD: {
-                    tabId: 0,
-                    minutes: value.AUTO_RELOAD.minutes,
-                    seconds: value.AUTO_RELOAD.seconds,
-                  },
+                  TAB_ID: 0,
                 });
 
-                chrome.tabs.sendMessage(form.values.tabId, {
+                chrome.tabs.sendMessage(value.TAB_ID, {
                   type: "CLEAR_INTERVAL",
                 });
               });
