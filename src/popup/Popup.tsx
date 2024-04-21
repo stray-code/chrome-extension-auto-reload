@@ -1,4 +1,4 @@
-import { Switch, Flex, Text, Button, Stack, NativeSelect } from "@mantine/core";
+import { Flex, Text, Button, Stack, NativeSelect } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect } from "react";
 import { minutes, seconds } from "./constants";
@@ -49,12 +49,6 @@ function App() {
       })}
     >
       <Stack p="md" w={240} gap="md">
-        <Flex justify="flex-end" align="center">
-          <Switch
-            label="有効にする"
-            {...form.getInputProps("enabled", { type: "checkbox" })}
-          />
-        </Flex>
         <Flex align="center">
           <NativeSelect data={minutes} {...form.getInputProps("minutes")} />
           <Text ml="xs" mr="md">
