@@ -54,7 +54,7 @@ function App() {
         window.close();
       })}
     >
-      <Stack p="md" w={160} gap="md">
+      <Stack p="md" w={210} gap="md">
         <Box>
           <Text fz="xs">更新間隔</Text>
           <Flex align="center" gap="xs">
@@ -72,13 +72,25 @@ function App() {
             />
           </Flex>
         </Box>
-        <Flex justify="space-between">
+        {tabId === 0 ? (
           <Button
+            fullWidth
+            size="xs"
+            type="submit"
+            variant="outline"
+            disabled={
+              form.values.minutes === "0" && form.values.seconds === "0"
+            }
+          >
+            このタブで自動更新を開始
+          </Button>
+        ) : (
+          <Button
+            fullWidth
             size="xs"
             type="button"
             variant="outline"
             color="red"
-            disabled={tabId === 0}
             onClick={() => {
               chrome.storage.local.get(["TAB_ID"], async (value) => {
                 if (!value.TAB_ID) {
@@ -101,19 +113,9 @@ function App() {
               });
             }}
           >
-            停止
+            自動更新を停止
           </Button>
-          <Button
-            size="xs"
-            type="submit"
-            variant="outline"
-            disabled={
-              form.values.minutes === "0" && form.values.seconds === "0"
-            }
-          >
-            開始
-          </Button>
-        </Flex>
+        )}
       </Stack>
     </form>
   );
