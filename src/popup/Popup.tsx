@@ -43,7 +43,7 @@ function App() {
           },
         });
 
-        chrome.tabs.sendMessage(tab.id, { type: "RELOAD" });
+        chrome.tabs.sendMessage(tab.id, { type: "INIT" });
 
         window.close();
       })}

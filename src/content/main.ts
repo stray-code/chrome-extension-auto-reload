@@ -40,8 +40,8 @@ const init = () => {
 init();
 
 chrome.runtime.onMessage.addListener((message) => {
-  if (message.type === "RELOAD") {
-    window.location.reload();
+  if (message.type === "INIT") {
+    init();
   }
 
   if (message.type === "CLEAR_INTERVAL") {
