@@ -91,13 +91,12 @@ function App() {
                   TAB_ID: 0,
                 });
 
-                chrome.tabs.sendMessage(value.TAB_ID, {
-                  type: "CLEAR_INTERVAL",
+                chrome.action.setBadgeText({
+                  text: "",
                 });
 
-                chrome.runtime.sendMessage({
-                  type: "UPDATE_BADGE",
-                  text: "",
+                chrome.tabs.sendMessage(value.TAB_ID, {
+                  type: "CLEAR_INTERVAL",
                 });
               });
             }}
