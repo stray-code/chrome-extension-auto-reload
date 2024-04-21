@@ -66,8 +66,37 @@ function App() {
             />
           </Flex>
         </Box>
-        <Flex justify="flex-end">
-          <Button type="submit">保存</Button>
+        <Flex justify="space-between">
+          <Button
+            size="xs"
+            type="button"
+            variant="outline"
+            color="red"
+            onClick={() => {
+              chrome.storage.local.get(["AUTO_RELOAD"], async (value) => {
+                if (!value?.AUTO_RELOAD) {
+                  return;
+                }
+
+                chrome.storage.local.set({
+                  AUTO_RELOAD: {
+                    tabId: 0,
+                    minutes: value.AUTO_RELOAD.minutes,
+                    seconds: value.AUTO_RELOAD.seconds,
+                  },
+                });
+
+                chrome.tabs.sendMessage(form.values.tabId, {
+                  type: "CLEAR_INTERVAL",
+                });
+              });
+            }}
+          >
+            停止
+          </Button>
+          <Button size="xs" type="submit" variant="outline">
+            開始
+          </Button>
         </Flex>
       </Stack>
     </form>

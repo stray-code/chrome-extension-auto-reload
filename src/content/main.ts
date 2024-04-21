@@ -1,9 +1,6 @@
-const init = () => {
-  chrome.runtime.sendMessage({
-    type: "UPDATE_BADGE",
-    text: "",
-  });
+let intervalId: number = 0;
 
+const init = () => {
   chrome.storage.local.get(["AUTO_RELOAD"], async (value) => {
     if (!value?.AUTO_RELOAD) {
       return;
@@ -25,7 +22,7 @@ const init = () => {
       return;
     }
 
-    setInterval(() => {
+    intervalId = setInterval(() => {
       time--;
 
       chrome.runtime.sendMessage({
@@ -45,5 +42,14 @@ init();
 chrome.runtime.onMessage.addListener((message) => {
   if (message.type === "RELOAD") {
     window.location.reload();
+  }
+
+  if (message.type === "CLEAR_INTERVAL") {
+    clearInterval(intervalId);
+
+    chrome.runtime.sendMessage({
+      type: "UPDATE_BADGE",
+      text: "",
+    });
   }
 });
