@@ -74,46 +74,49 @@ function App() {
             />
           </Flex>
         </Box>
-        {tabId === 0 ? (
-          <Button
-            fullWidth
-            size="xs"
-            type="submit"
-            variant="outline"
-            disabled={
-              form.values.minutes === "0" && form.values.seconds === "0"
+        <Button
+          fullWidth
+          size="xs"
+          type="submit"
+          variant="outline"
+          disabled={
+            tabId !== 0 ||
+            (form.values.minutes === "0" && form.values.seconds === "0")
+          }
+        >
+          このタブで自動更新を開始
+        </Button>
+        <Button
+          fullWidth
+          size="xs"
+          type="button"
+          variant="outline"
+          color="red"
+          disabled={tabId === 0}
+          onClick={async () => {
+            const tabId = await getLocalStorage("tabId");
+
+            if (!tabId) {
+              return;
             }
-          >
-            このタブで自動更新を開始
-          </Button>
-        ) : (
-          <Button
-            fullWidth
-            size="xs"
-            type="button"
-            variant="outline"
-            color="red"
-            onClick={async () => {
-              const tabId = await chrome.storage.local
-                .get(["TAB_ID"])
-                .then((value) => value.TAB_ID);
 
-              setTabId(0);
+            setTabId(0);
 
-              setLocalStorage("tabId", 0);
+            await setLocalStorage("tabId", 0);
 
-              chrome.action.setBadgeText({
-                text: "",
-              });
+            await chrome.action.setBadgeText({
+              text: "",
+            });
 
-              chrome.tabs.sendMessage<Message>(tabId, {
-                type: "CLEAR_INTERVAL",
-              });
-            }}
-          >
-            自動更新を停止
-          </Button>
-        )}
+            await chrome.tabs.sendMessage<Message>(tabId, {
+              type: "CLEAR_INTERVAL",
+            });
+
+            window.close();
+          }}
+        >
+          自動更新を停止
+        </Button>
       </Stack>
     </form>
   );
