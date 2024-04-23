@@ -6,7 +6,7 @@ const manifest = defineManifest({
   manifest_version: 3,
   name: "自動ページ更新（リロード）",
   description: "自動でページを更新できます。",
-  version: "1.1.2",
+  version: "1.1.3",
   icons: {
     16: "img/icon16.png",
     48: "img/icon48.png",
