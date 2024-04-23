@@ -1,11 +1,11 @@
-import { getLocalStorage } from "../localStorage";
 import type { Message } from "../types";
+import { getLocalStorage } from "../utils";
 
 let intervalId: number = 0;
 
 const init = async () => {
-  const time = await getLocalStorage("TIME");
-  const tabId = await getLocalStorage("TAB_ID");
+  const time = await getLocalStorage("time");
+  const tabId = await getLocalStorage("tabId");
 
   if (!time || !tabId) {
     return;

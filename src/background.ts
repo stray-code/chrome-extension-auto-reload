@@ -1,5 +1,5 @@
-import { getLocalStorage, setLocalStorage } from "./localStorage";
 import { Message } from "./types";
+import { getLocalStorage, setLocalStorage } from "./utils";
 
 chrome.runtime.onMessage.addListener((message: Message, sender, response) => {
   if (message.type === "UPDATE_BADGE") {
@@ -18,13 +18,13 @@ chrome.runtime.onMessage.addListener((message: Message, sender, response) => {
 });
 
 chrome.tabs.onRemoved.addListener(async (removedTabId) => {
-  const tabId = await getLocalStorage("TAB_ID");
+  const tabId = await getLocalStorage("tabId");
 
   if (tabId !== removedTabId) {
     return;
   }
 
-  await setLocalStorage("TAB_ID", 0);
+  await setLocalStorage("tabId", 0);
 
   chrome.action.setBadgeText({
     text: "",

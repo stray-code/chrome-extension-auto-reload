@@ -3,7 +3,7 @@ import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { minutes, seconds } from "./constants";
 import type { Message } from "../types";
-import { getLocalStorage, setLocalStorage } from "../localStorage";
+import { getLocalStorage, setLocalStorage } from "../utils";
 
 function App() {
   const form = useForm({
@@ -15,8 +15,8 @@ function App() {
   const [tabId, setTabId] = useState(0);
 
   const getData = async () => {
-    const time = await getLocalStorage("TIME");
-    const tabId = await getLocalStorage("TAB_ID");
+    const time = await getLocalStorage("time");
+    const tabId = await getLocalStorage("tabId");
 
     if (time) {
       form.setValues(time);
@@ -44,12 +44,12 @@ function App() {
           return;
         }
 
-        await setLocalStorage("TIME", {
+        await setLocalStorage("time", {
           minutes: values.minutes,
           seconds: values.seconds,
         });
 
-        await setLocalStorage("TAB_ID", tab.id);
+        await setLocalStorage("tabId", tab.id);
 
         await chrome.tabs.sendMessage<Message>(tab.id, { type: "INIT" });
 
@@ -100,7 +100,7 @@ function App() {
 
               setTabId(0);
 
-              setLocalStorage("TAB_ID", 0);
+              setLocalStorage("tabId", 0);
 
               chrome.action.setBadgeText({
                 text: "",
