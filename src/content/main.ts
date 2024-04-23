@@ -1,40 +1,44 @@
 let intervalId: number = 0;
 
-const init = () => {
-  chrome.storage.local.get(["TIME", "TAB_ID"], async (value) => {
-    if (!value.TIME || !value.TAB_ID) {
-      return;
-    }
+const init = async () => {
+  const time = await chrome.storage.local
+    .get(["TIME"])
+    .then((value) => value.TIME);
 
-    const { minutes, seconds } = value.TIME;
+  const tabId = await chrome.storage.local
+    .get(["TAB_ID"])
+    .then((value) => value.TAB_ID);
 
-    const currentTabId = await chrome.runtime.sendMessage({
-      type: "GET_TAB_ID",
+  if (!time || !tabId) {
+    return;
+  }
+
+  const currentTabId = await chrome.runtime.sendMessage({
+    type: "GET_TAB_ID",
+  });
+
+  if (currentTabId !== tabId) {
+    return;
+  }
+
+  let countTime = +time.minutes * 60 + +time.seconds;
+
+  if (countTime === 0) {
+    return;
+  }
+
+  intervalId = setInterval(() => {
+    countTime--;
+
+    chrome.runtime.sendMessage({
+      type: "UPDATE_BADGE",
+      text: countTime.toString(),
     });
 
-    if (currentTabId !== value.TAB_ID) {
-      return;
+    if (countTime <= 0) {
+      window.location.reload();
     }
-
-    let time = +minutes * 60 + +seconds;
-
-    if (time === 0) {
-      return;
-    }
-
-    intervalId = setInterval(() => {
-      time--;
-
-      chrome.runtime.sendMessage({
-        type: "UPDATE_BADGE",
-        text: time.toString(),
-      });
-
-      if (time <= 0) {
-        window.location.reload();
-      }
-    }, 1000);
-  });
+  }, 1000);
 };
 
 init();
@@ -42,6 +46,7 @@ init();
 chrome.runtime.onMessage.addListener((message) => {
   if (message.type === "INIT") {
     init();
+    return;
   }
 
   if (message.type === "CLEAR_INTERVAL") {

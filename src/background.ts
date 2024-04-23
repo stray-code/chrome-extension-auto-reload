@@ -14,18 +14,20 @@ chrome.runtime.onMessage.addListener((message, sender, response) => {
   }
 });
 
-chrome.tabs.onRemoved.addListener((tabId) => {
-  chrome.storage.local.get(["TAB_ID"], async (value) => {
-    if (value.TAB_ID !== tabId) {
-      return;
-    }
+chrome.tabs.onRemoved.addListener(async (removedTabId) => {
+  const tabId = await chrome.storage.local
+    .get(["TAB_ID"])
+    .then((value) => value.TAB_ID);
 
-    chrome.storage.local.set({
-      TAB_ID: 0,
-    });
+  if (tabId !== removedTabId) {
+    return;
+  }
 
-    chrome.action.setBadgeText({
-      text: "",
-    });
+  chrome.storage.local.set({
+    TAB_ID: 0,
+  });
+
+  chrome.action.setBadgeText({
+    text: "",
   });
 });

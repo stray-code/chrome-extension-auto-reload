@@ -12,20 +12,26 @@ function App() {
   });
   const [tabId, setTabId] = useState(0);
 
+  const getLocalStorage = async () => {
+    const time = await chrome.storage.local
+      .get(["TIME"])
+      .then((value) => value.TIME);
+
+    const tabId = await chrome.storage.local
+      .get(["TAB_ID"])
+      .then((value) => value.TAB_ID);
+
+    if (time) {
+      form.setValues(time);
+    }
+
+    if (tabId) {
+      setTabId(tabId);
+    }
+  };
+
   useEffect(() => {
-    chrome.storage.local.get(["TIME", "TAB_ID"], (value) => {
-      if (!value.TIME) {
-        return;
-      }
-
-      form.setValues(value.TIME);
-
-      if (!value.TAB_ID) {
-        return;
-      }
-
-      setTabId(value.TAB_ID);
-    });
+    getLocalStorage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -91,25 +97,23 @@ function App() {
             type="button"
             variant="outline"
             color="red"
-            onClick={() => {
-              chrome.storage.local.get(["TAB_ID"], async (value) => {
-                if (!value.TAB_ID) {
-                  return;
-                }
+            onClick={async () => {
+              const tabId = await chrome.storage.local
+                .get(["TAB_ID"])
+                .then((value) => value.TAB_ID);
 
-                setTabId(0);
+              setTabId(0);
 
-                chrome.storage.local.set({
-                  TAB_ID: 0,
-                });
+              chrome.storage.local.set({
+                TAB_ID: 0,
+              });
 
-                chrome.action.setBadgeText({
-                  text: "",
-                });
+              chrome.action.setBadgeText({
+                text: "",
+              });
 
-                chrome.tabs.sendMessage(value.TAB_ID, {
-                  type: "CLEAR_INTERVAL",
-                });
+              chrome.tabs.sendMessage(tabId, {
+                type: "CLEAR_INTERVAL",
               });
             }}
           >
