@@ -1,4 +1,6 @@
-chrome.runtime.onMessage.addListener((message, sender, response) => {
+import { Message } from "./types";
+
+chrome.runtime.onMessage.addListener((message: Message, sender, response) => {
   if (message.type === "UPDATE_BADGE") {
     chrome.action.setBadgeText({
       text: message.text,

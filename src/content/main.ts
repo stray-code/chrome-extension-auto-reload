@@ -1,3 +1,5 @@
+import type { Message } from "../types";
+
 let intervalId: number = 0;
 
 const init = async () => {
@@ -13,7 +15,7 @@ const init = async () => {
     return;
   }
 
-  const currentTabId = await chrome.runtime.sendMessage({
+  const currentTabId = await chrome.runtime.sendMessage<Message>({
     type: "GET_TAB_ID",
   });
 
@@ -30,7 +32,7 @@ const init = async () => {
   intervalId = setInterval(() => {
     countTime--;
 
-    chrome.runtime.sendMessage({
+    chrome.runtime.sendMessage<Message>({
       type: "UPDATE_BADGE",
       text: countTime.toString(),
     });
@@ -43,7 +45,7 @@ const init = async () => {
 
 init();
 
-chrome.runtime.onMessage.addListener((message) => {
+chrome.runtime.onMessage.addListener((message: Message) => {
   if (message.type === "INIT") {
     init();
     return;

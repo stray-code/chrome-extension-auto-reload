@@ -2,6 +2,7 @@ import { Flex, Text, Button, Stack, NativeSelect, Box } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { minutes, seconds } from "./constants";
+import type { Message } from "../types";
 
 function App() {
   const form = useForm({
@@ -55,7 +56,7 @@ function App() {
           TAB_ID: tab.id,
         });
 
-        chrome.tabs.sendMessage(tab.id, { type: "INIT" });
+        chrome.tabs.sendMessage<Message>(tab.id, { type: "INIT" });
 
         window.close();
       })}
@@ -112,7 +113,7 @@ function App() {
                 text: "",
               });
 
-              chrome.tabs.sendMessage(tabId, {
+              chrome.tabs.sendMessage<Message>(tabId, {
                 type: "CLEAR_INTERVAL",
               });
             }}
