@@ -1,3 +1,4 @@
+import { getLocalStorage, setLocalStorage } from "./localStorage";
 import { Message } from "./types";
 
 chrome.runtime.onMessage.addListener((message: Message, sender, response) => {
@@ -17,17 +18,13 @@ chrome.runtime.onMessage.addListener((message: Message, sender, response) => {
 });
 
 chrome.tabs.onRemoved.addListener(async (removedTabId) => {
-  const tabId = await chrome.storage.local
-    .get(["TAB_ID"])
-    .then((value) => value.TAB_ID);
+  const tabId = await getLocalStorage("TAB_ID");
 
   if (tabId !== removedTabId) {
     return;
   }
 
-  chrome.storage.local.set({
-    TAB_ID: 0,
-  });
+  await setLocalStorage("TAB_ID", 0);
 
   chrome.action.setBadgeText({
     text: "",

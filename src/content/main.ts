@@ -1,15 +1,11 @@
+import { getLocalStorage } from "../localStorage";
 import type { Message } from "../types";
 
 let intervalId: number = 0;
 
 const init = async () => {
-  const time = await chrome.storage.local
-    .get(["TIME"])
-    .then((value) => value.TIME);
-
-  const tabId = await chrome.storage.local
-    .get(["TAB_ID"])
-    .then((value) => value.TAB_ID);
+  const time = await getLocalStorage("TIME");
+  const tabId = await getLocalStorage("TAB_ID");
 
   if (!time || !tabId) {
     return;

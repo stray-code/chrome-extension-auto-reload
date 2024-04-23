@@ -3,6 +3,7 @@ import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { minutes, seconds } from "./constants";
 import type { Message } from "../types";
+import { getLocalStorage, setLocalStorage } from "../localStorage";
 
 function App() {
   const form = useForm({
@@ -13,14 +14,9 @@ function App() {
   });
   const [tabId, setTabId] = useState(0);
 
-  const getLocalStorage = async () => {
-    const time = await chrome.storage.local
-      .get(["TIME"])
-      .then((value) => value.TIME);
-
-    const tabId = await chrome.storage.local
-      .get(["TAB_ID"])
-      .then((value) => value.TAB_ID);
+  const getData = async () => {
+    const time = await getLocalStorage("TIME");
+    const tabId = await getLocalStorage("TAB_ID");
 
     if (time) {
       form.setValues(time);
@@ -32,7 +28,7 @@ function App() {
   };
 
   useEffect(() => {
-    getLocalStorage();
+    getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -48,15 +44,14 @@ function App() {
           return;
         }
 
-        chrome.storage.local.set({
-          TIME: {
-            minutes: values.minutes,
-            seconds: values.seconds,
-          },
-          TAB_ID: tab.id,
+        await setLocalStorage("TIME", {
+          minutes: values.minutes,
+          seconds: values.seconds,
         });
 
-        chrome.tabs.sendMessage<Message>(tab.id, { type: "INIT" });
+        await setLocalStorage("TAB_ID", tab.id);
+
+        await chrome.tabs.sendMessage<Message>(tab.id, { type: "INIT" });
 
         window.close();
       })}
@@ -105,9 +100,7 @@ function App() {
 
               setTabId(0);
 
-              chrome.storage.local.set({
-                TAB_ID: 0,
-              });
+              setLocalStorage("TAB_ID", 0);
 
               chrome.action.setBadgeText({
                 text: "",
