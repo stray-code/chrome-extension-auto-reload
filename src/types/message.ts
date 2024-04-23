@@ -1,17 +1,17 @@
 type InitMessage = {
-  type: "INIT";
+  type: "init";
 };
 
 type ClearIntervalMessage = {
-  type: "CLEAR_INTERVAL";
+  type: "clearInterval";
 };
 
 type GetTabIdMessage = {
-  type: "GET_TAB_ID";
+  type: "getTabId";
 };
 
 type UpdateBadgeMessage = {
-  type: "UPDATE_BADGE";
+  type: "updateBadge";
   text: string;
 };
 

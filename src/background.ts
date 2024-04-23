@@ -2,13 +2,13 @@ import { Message } from "./types";
 import { getLocalStorage, setLocalStorage } from "./utils";
 
 chrome.runtime.onMessage.addListener((message: Message, sender, response) => {
-  if (message.type === "UPDATE_BADGE") {
+  if (message.type === "updateBadge") {
     chrome.action.setBadgeText({
       text: message.text,
     });
   }
 
-  if (message.type === "GET_TAB_ID") {
+  if (message.type === "getTabId") {
     if (!sender.tab) {
       return;
     }

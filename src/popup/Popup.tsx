@@ -51,7 +51,7 @@ function App() {
 
         await setLocalStorage("tabId", tab.id);
 
-        await chrome.tabs.sendMessage<Message>(tab.id, { type: "INIT" });
+        await chrome.tabs.sendMessage<Message>(tab.id, { type: "init" });
 
         window.close();
       })}
@@ -109,7 +109,7 @@ function App() {
             });
 
             await chrome.tabs.sendMessage<Message>(tabId, {
-              type: "CLEAR_INTERVAL",
+              type: "clearInterval",
             });
 
             window.close();

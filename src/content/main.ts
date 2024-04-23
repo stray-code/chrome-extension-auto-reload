@@ -12,7 +12,7 @@ const init = async () => {
   }
 
   const currentTabId = await chrome.runtime.sendMessage<Message>({
-    type: "GET_TAB_ID",
+    type: "getTabId",
   });
 
   if (currentTabId !== tabId) {
@@ -29,7 +29,7 @@ const init = async () => {
     countTime--;
 
     chrome.runtime.sendMessage<Message>({
-      type: "UPDATE_BADGE",
+      type: "updateBadge",
       text: countTime.toString(),
     });
 
@@ -42,12 +42,12 @@ const init = async () => {
 init();
 
 chrome.runtime.onMessage.addListener((message: Message) => {
-  if (message.type === "INIT") {
+  if (message.type === "init") {
     init();
     return;
   }
 
-  if (message.type === "CLEAR_INTERVAL") {
+  if (message.type === "clearInterval") {
     clearInterval(intervalId);
   }
 });
